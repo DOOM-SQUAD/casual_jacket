@@ -7,7 +7,7 @@ Dir[File.join(ROOT, 'spec', 'support', '**', '*.rb')].each { |file| require file
 # Set load path for the gem itself
 $LOAD_PATH.unshift(File.expand_path(ROOT))
 
-require 'importer'
+require 'casual_jacket'
 require 'pry'
 
 RSpec.configure do |config|
