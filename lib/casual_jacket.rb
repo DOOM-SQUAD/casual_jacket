@@ -15,11 +15,13 @@ module CasualJacket
     Redis.new # FIXME
   end
 
-  def cache(file, legend)
+  def cache_operations(handle, file, legend)
     spreadsheet = Spreadsheet.new(file, legend)
-    Packer.new(spreadsheet).tap do |packer|
-      # do all the things
-    end
+    Packer.cache_spreadsheet(handle, spreadsheet)
+  end
+
+  def operations_for(handle)
+    Unpacker.operations_for(handle)
   end
 
 end

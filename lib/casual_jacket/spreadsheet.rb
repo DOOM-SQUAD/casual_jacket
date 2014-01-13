@@ -15,8 +15,8 @@ module CasualJacket
     end
 
     def translated_rows(&block)
-      rows.each do |row|
-        yield row if block_given?
+      rows.each.with_index(1) do |row, index|
+        yield row, index if block_given?
       end
     end
 

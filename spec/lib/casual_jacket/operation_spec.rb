@@ -12,7 +12,6 @@ describe CasualJacket::Operation do
 
   let(:json_hash) do
     {
-      'consumer_name' => consumer_name,
       'attributes'    => attributes
     }.to_json
   end

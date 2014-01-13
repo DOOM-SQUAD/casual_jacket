@@ -1,43 +1,34 @@
 module CasualJacket
 
-  class Unpacker
+  module Unpacker
 
-    attr_reader :handle, :operations
+    extend self
 
-    def initialize(handle)
-      @handle = handle
-      refresh_operations
-    end
-
-    def refresh_operations
-      @operations = fetch_operations
-    end
-
-    def failed_operations
-      operations.select do |operation|
-        error_ids.include?(operation.id)
-      end
-    end
-
-    private
-
-    def fetch_operations
+    def operations_for(handle)
       CasualJacket.redis_connection.keys("#{handle}*").map do |key|
         id = key.split('-').last
         Operation.from_json(id, operation_json(key))
       end
     end
 
+    def failures_for(handle)
+      operations_for(handle).select do |operation|
+        error_ids_for(handle).include?(operation.id)
+      end
+    end
+
+    private
+
     def operation_json(key)
       CasualJacket.redis_connection.get(key)
     end
 
-    def error_key
+    def error_key_for(handle)
       "errors:#{handle}"
     end
 
-    def error_ids
-      CasualJacket.redis_connection.get(error_key)
+    def error_ids_for(handle)
+      CasualJacket.redis_connection.get(error_key_for(handle))
     end
 
   end
