@@ -24,6 +24,6 @@ task :spec do
 end
 
 desc "Boot an application console in a pry REPL"
-task :impc do
+task :wine_lolly do
   sh "pry -r #{boot_file_name}"
 end
