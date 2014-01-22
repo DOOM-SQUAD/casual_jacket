@@ -7,13 +7,12 @@ require_relative 'casual_jacket/errors/setting_not_configured'
 
 require_relative 'casual_jacket/config/options'
 require_relative 'casual_jacket/config'
+require_relative 'casual_jacket/config/option_definitions'
 
 require_relative 'casual_jacket/spreadsheet'
 require_relative 'casual_jacket/operation'
 require_relative 'casual_jacket/packer'
 require_relative 'casual_jacket/unpacker'
-
-require_relative 'casual_jacket/config/option_definitions'
 
 module CasualJacket
 
@@ -96,7 +95,7 @@ module CasualJacket
   # Returns a Redis object representing CasualJacket's current Redis
   # connection.
   def redis_connection
-    Redis.new(Config.redis_host)
+    Redis.new(host: Config.redis_host)
   end
 
 end

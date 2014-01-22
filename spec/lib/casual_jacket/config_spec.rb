@@ -4,6 +4,10 @@ describe CasualJacket::Config do
 
   let(:config) { CasualJacket::Config }
 
+  after do
+    CasualJacket::Config.reset
+  end
+
   describe 'standard configuration' do
 
     let(:domain) { 'fake.domain.string' }

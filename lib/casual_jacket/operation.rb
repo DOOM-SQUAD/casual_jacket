@@ -34,12 +34,10 @@ module CasualJacket
 
     def method_missing(method, *args, &block)
       if method =~ /\Avalue_for_/
-        @attributes.fetch(method.to_s.gsub('value_for_',''))
+        @attributes.fetch(method.to_s.gsub('value_for_',''), nil)
       else
         super
       end
-    rescue KeyError
-      super
     end
 
   end

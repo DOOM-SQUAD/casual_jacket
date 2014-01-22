@@ -24,12 +24,12 @@ describe CasualJacket::Operation do
       expect(operation.send("value_for_#{method_name}")).to eq(value)
     end
 
-    it 'raises NoMethodError for keys that do not exist' do
-      expect { operation.send("value_for_nothing") }.to raise_error(NoMethodError)
-    end
-
     it 'does not clobber regular NoMethodError exceptions' do
       expect { operation.send(:its_gon_explode) }.to raise_error(NoMethodError)
+    end
+
+    it 'returns nil for keys that do not exist' do
+      expect(operation.send("value_for_nothing")).to be_nil
     end
 
   end
