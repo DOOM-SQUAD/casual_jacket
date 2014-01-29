@@ -12,8 +12,11 @@ describe CasualJacket do
 
   let(:legend) { { 'Group Code' => 'sku', 'UPC Code' => 'upc_code' } }
 
+  let(:group_header) { 'Group Code' }
+
   let(:operations)           { CasualJacket.operations_for(handle) }
   let(:operation_attributes) { operations.map(&:attributes) }
+  let(:operation_groups)     { operations.map(&:group) }
 
   let(:expected_attributes1) do
     {
@@ -29,21 +32,27 @@ describe CasualJacket do
     }
   end
 
+  let(:expected_groups) { ['SCHWA', 'FOO'] }
+
   before do
     CasualJacket.redis_connection.flushall
-    CasualJacket.cache_operations(handle, csv_file, legend)
+    CasualJacket.cache_operations(handle, csv_file, legend, group_header)
   end
 
   it 'has produced the correct count of operations' do
     expect(operations.count).to eq(2)
   end
 
-  it 'has produces an operation representing the first row from the csv' do
+  it 'has produced an operation representing the first row from the csv' do
     expect(operation_attributes).to include(expected_attributes1)
   end
 
-  it 'has produces an operation representing the second row from the csv' do
+  it 'has produced an operation representing the second row from the csv' do
     expect(operation_attributes).to include(expected_attributes2)
+  end
+
+  it 'has produces operations with the correct grouping' do
+    expect(operation_groups).to eq(expected_groups)
   end
 
 end

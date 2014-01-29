@@ -7,7 +7,7 @@ module CasualJacket
     def operations_for(handle)
       CasualJacket.redis_connection.keys("#{handle}*").map do |key|
         id = key.split('-').last
-        Operation.from_json(id, operation_json(key))
+        Operation.from_redis(id, redis_hash(key))
       end
     end
 
@@ -19,8 +19,8 @@ module CasualJacket
 
     private
 
-    def operation_json(key)
-      CasualJacket.redis_connection.get(key)
+    def redis_hash(key)
+      CasualJacket.redis_connection.hgetall(key)
     end
 
     def error_key_for(handle)

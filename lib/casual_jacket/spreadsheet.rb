@@ -2,12 +2,17 @@ module CasualJacket
 
   class Spreadsheet
 
-    attr_reader :legend
+    attr_reader :legend, :group_header
 
-    def initialize(file, legend)
-      @file        = file
-      @legend      = legend
-      @parsed_data = CSV.parse(@file, headers: :first_row)
+    def initialize(file, legend, group_header)
+      @file         = file
+      @legend       = legend
+      @group_header = group_header
+      @parsed_data  = CSV.parse(@file, headers: :first_row)
+
+      unless legend[group_header]
+        raise Errors::InvalidGroupHeader.new(group_header)
+      end
     end
 
     def headers
@@ -16,8 +21,12 @@ module CasualJacket
 
     def translated_rows(&block)
       rows.each.with_index(1) do |row, index|
-        yield row, index if block_given?
+        yield index, row, find_group(row) if block_given?
       end
+    end
+
+    def grouping_attribute
+      legend[group_header]
     end
 
     private
@@ -34,6 +43,10 @@ module CasualJacket
           translated_row[legend[key]] = value
         end
       end
+    end
+
+    def find_group(row)
+      row[grouping_attribute]
     end
 
   end

@@ -8,27 +8,25 @@ module CasualJacket
 
   class Operation
 
-    attr_accessor :id, :attributes, :message
+    attr_accessor :id, :attributes, :group, :message
 
-    def self.from_json(id, json_string)
-      hash = JSON.parse(json_string)
-      new(id, hash['attributes'], hash['message'])
+    def self.from_redis(id, redis_hash)
+      attributes = JSON.parse(redis_hash['attributes'])
+      new(id, attributes, redis_hash['group'], redis_hash['message'])
     end
 
-    def initialize(id, attributes, message=nil)
+    def initialize(id, attributes, group, message=nil)
       @id            = id
       @attributes    = attributes
+      @group         = group
       @message       = message
-    end
-
-    def to_json
-      to_hash.to_json
     end
 
     def to_hash
       {
-        'attributes'    => attributes,
-        'message'       => message
+        'attributes' => attributes.to_json,
+        'group'      => group,
+        'message'    => message
       }
     end
 

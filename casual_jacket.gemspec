@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = '2.1.10'
 
   s.name              = 'casual_jacket'
-  s.version           = '1.0.0'
+  s.version           = '1.1.0'
   s.date              = '2013-12-19'
 
   s.description   = %q{A library to cache and retrieve information from a spreadsheet}

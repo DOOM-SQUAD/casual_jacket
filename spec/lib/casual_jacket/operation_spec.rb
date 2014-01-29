@@ -8,15 +8,15 @@ describe CasualJacket::Operation do
   let(:method_name) { :an_example_field }
   let(:value)       { 'an example piece of data' }
 
-  let(:attributes) { { method_name => value } }
+  let(:attributes) { { method_name => value }.to_json }
 
-  let(:json_hash) do
+  let(:redis_hash) do
     {
-      'attributes'    => attributes
-    }.to_json
+      'attributes' => attributes
+    }
   end
 
-  let(:operation) { CasualJacket::Operation.from_json(id, json_hash) }
+  let(:operation) { CasualJacket::Operation.from_redis(id, redis_hash) }
 
   describe 'method additions' do
 
