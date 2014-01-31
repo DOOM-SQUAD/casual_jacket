@@ -29,6 +29,9 @@ module CasualJacket
       legend[group_header]
     end
 
+    def group_list
+    end
+
     private
 
     def rows

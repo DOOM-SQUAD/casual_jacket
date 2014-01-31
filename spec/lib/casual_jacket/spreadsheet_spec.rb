@@ -60,4 +60,10 @@ describe CasualJacket::Spreadsheet do
 
   end
 
+  describe '#group_list' do
+
+    it 'returns a list of all groups from the spreadsheet'
+
+  end
+
 end

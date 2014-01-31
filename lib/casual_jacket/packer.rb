@@ -8,6 +8,8 @@ module CasualJacket
       spreadsheet.translated_rows do |index, attributes, group|
         cache_operation(handle, index, attributes, group)
       end
+
+      write_groups
     end
 
     def cache_operation(handle, index, attributes, group)
@@ -25,6 +27,16 @@ module CasualJacket
 
     def build_key(handle, operation)
       "#{handle}-#{operation.id}"
+    end
+
+    def write_groups(spreadsheet)
+      CasualJacket.redis_connection.set(
+        group_list_key, spreadsheet.group_list
+      )
+    end
+
+    def group_list_key
+      "#{handle}-groups"
     end
 
   end
