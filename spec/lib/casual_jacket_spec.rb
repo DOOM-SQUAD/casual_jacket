@@ -52,7 +52,7 @@ describe CasualJacket do
   end
 
   it 'has produces operations with the correct grouping' do
-    expect(operation_groups).to eq(expected_groups)
+    expect(operation_groups).to match_array(expected_groups)
   end
 
 end
