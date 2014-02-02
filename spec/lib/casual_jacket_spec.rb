@@ -55,4 +55,8 @@ describe CasualJacket do
     expect(operation_groups).to match_array(expected_groups)
   end
 
+  # TODO (jchristie) Fetch list of groups, exclude errors/groups from unpacker
+  # TODO (jchristie) Abstract explicit strings and filters into module of
+  # constants
+
 end

@@ -30,6 +30,7 @@ module CasualJacket
     end
 
     def group_list
+      "stuff"
     end
 
     private

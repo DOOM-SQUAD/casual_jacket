@@ -9,7 +9,7 @@ module CasualJacket
         cache_operation(handle, index, attributes, group)
       end
 
-      write_groups
+      write_groups(handle, spreadsheet)
     end
 
     def cache_operation(handle, index, attributes, group)
@@ -29,13 +29,13 @@ module CasualJacket
       "#{handle}-#{operation.id}"
     end
 
-    def write_groups(spreadsheet)
+    def write_groups(handle, spreadsheet)
       CasualJacket.redis_connection.set(
-        group_list_key, spreadsheet.group_list
+        group_list_key(handle), spreadsheet.group_list
       )
     end
 
-    def group_list_key
+    def group_list_key(handle)
       "#{handle}-groups"
     end
 
