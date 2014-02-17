@@ -10,6 +10,7 @@ require_relative 'casual_jacket/config/options'
 require_relative 'casual_jacket/config'
 require_relative 'casual_jacket/config/option_definitions'
 
+require_relative 'casual_jacket/keys'
 require_relative 'casual_jacket/spreadsheet'
 require_relative 'casual_jacket/operation'
 require_relative 'casual_jacket/packer'
@@ -65,7 +66,7 @@ module CasualJacket
   #   legend = {
   #     "headername" => "translation"
   #   }
-  #   group_by = "Group Code"
+  #   group_header = "Group Code"
   #
   #   CasualJacket.cache_operations(handle, file, legend, group_by)
   #   # => "OK"
@@ -77,35 +78,56 @@ module CasualJacket
     Packer.cache_spreadsheet(handle, spreadsheet)
   end
 
-  # Thaw operations from the cache for a given handle.
+  # Iterate though the cached operations by group
   #
-  # handle - The String denoting the operation group to retrieve.
+  # handle - The String denoting the import's handle
+  # &block - The block receive the sets of operations
   #
   # Examples
   #
-  #   CasualJacket.operations_for("test_import")
+  #   handle = "test-import"
+  #
+  #   CasualJacket.each_operation_group(handle) do |operations|
+  #     puts operations
+  #   end
+  #   # => { "group" => [ "test-import:operation:group:1234" ] }
+  #
+  # Returns the hash of groups and their child keys
+  def each_operation_group(handle, &block)
+    Keys.all(handle).each do |group, keys|
+      operations = Unpacker.fetch_operations(keys)
+      yield operations if block_given?
+    end
+  end
+
+  # Thaw operations from the cache for a given handle.
+  #
+  # handle - The String denoting the handle to retrieve.
+  # group  - The String denoting the operation group to retrieve.
+  #
+  # Examples
+  #
+  #   CasualJacket.operations_for("test_import", "foo")
   #   # => [ #<Operation:123>, #<Operation:456> ]
   #
   # Returns an Array of Operation objects
-  def operations_for(handle)
-    Unpacker.operations_for(handle)
+  def operation_group(handle, group)
+    Unpacker.operation_group(handle, group)
   end
 
-  # Return the current Redis connection.  While intended to be a utility method
-  # for the rest of the library, this can be used to access the Redis store for
-  # CasualJacket directly.
+  # Returns the hashed versions of operations
+  #
+  # handle - The String for which handle to retrieve.
   #
   # Examples
   #
-  #   CasualJacket.new.redis_connection
-  #   # => #<Redis client v3.0.6 for redis://127.0.0.1:6379/0>
+  #   CasualJacket.all_operations(handle)
+  #   # => { "group" => [ #<Operation:123> ]
   #
-  # Returns a Redis object representing CasualJacket's current Redis
-  # connection.
-  def redis_connection
-    Redis.new(host: Config.redis_host)
+  # Returns a hashed set of operation lists, organized by group
+  def all_operations(handle)
+    Unpacker.all_operations(handle)
   end
-
 end
 
 if defined?(Rails)

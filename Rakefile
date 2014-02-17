@@ -11,6 +11,7 @@ end
 # Dependencies
 # ------------
 require 'bundler/setup'
+require 'pry'
 require boot_file_name
 
 Bundler.require(:default)
@@ -24,6 +25,6 @@ task :spec do
 end
 
 desc "Boot an application console in a pry REPL"
-task :wine_lolly do
-  sh "pry -r #{boot_file_name}"
+task :casualshell do
+  binding.pry CasualJacket
 end

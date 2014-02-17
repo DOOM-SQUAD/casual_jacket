@@ -10,9 +10,13 @@ module CasualJacket
 
     attr_accessor :id, :attributes, :group, :message
 
-    def self.from_redis(id, redis_hash)
-      attributes = JSON.parse(redis_hash['attributes'])
-      new(id, attributes, redis_hash['group'], redis_hash['message'])
+    def self.from_redis(redis_hash)
+      new(
+        redis_hash['id'],
+        JSON.parse(redis_hash['attributes']),
+        redis_hash['group'],
+        redis_hash['message']
+      )
     end
 
     def initialize(id, attributes, group, message=nil)
@@ -24,6 +28,7 @@ module CasualJacket
 
     def to_hash
       {
+        'id'         => id,
         'attributes' => attributes.to_json,
         'group'      => group,
         'message'    => message

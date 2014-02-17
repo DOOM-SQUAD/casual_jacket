@@ -2,10 +2,13 @@ require 'spec_helper'
 
 describe CasualJacket do
 
+  let(:group1) { 'SCHWA' }
+  let(:group2) { 'FOO' }
+
   let(:handle)  { 'test-import' }
   let(:headers) { 'Group Code,UPC Code' }
-  let(:row1)    { 'SCHWA,123456' }
-  let(:row2)    { 'FOO,654321' }
+  let(:row1)    { "#{group1},123456" }
+  let(:row2)    { "#{group2},654321" }
 
   let(:csv_string) { "#{headers}\n#{row1}\n#{row2}" }
   let(:csv_file)   { StringIO.new(csv_string) }
@@ -14,45 +17,85 @@ describe CasualJacket do
 
   let(:group_header) { 'Group Code' }
 
-  let(:operations)           { CasualJacket.operations_for(handle) }
-  let(:operation_attributes) { operations.map(&:attributes) }
-  let(:operation_groups)     { operations.map(&:group) }
-
   let(:expected_attributes1) do
     {
-      'sku'      => 'SCHWA',
+      'sku'      => group1,
       'upc_code' => '123456'
     }
   end
 
   let(:expected_attributes2) do
     {
-      'sku'      => 'FOO',
+      'sku'      => group2,
       'upc_code' => '654321'
     }
   end
 
-  let(:expected_groups) { ['SCHWA', 'FOO'] }
+  let(:operation_attributes) { operations.map(&:attributes) }
+  let(:operation_groups)     { operations.map(&:group) }
 
   before do
-    CasualJacket.redis_connection.flushall
+    CasualJacket::Keys.connection.flushall
     CasualJacket.cache_operations(handle, csv_file, legend, group_header)
   end
 
-  it 'has produced the correct count of operations' do
-    expect(operations.count).to eq(2)
+  describe '.operation_group' do
+
+    context 'querying for the first group' do
+
+      let(:operations) { CasualJacket.operation_group(handle, group1) }
+
+      it 'returns a single element' do
+        expect(operations.count).to eq(1)
+      end
+
+      it 'returns an element with a matching group' do
+        expect(operations.first.group).to eq(group1)
+      end
+
+      it 'returns an operation with the expected attributes' do
+        expect(operations.first.attributes).to eq(expected_attributes1)
+      end
+
+    end
+
+    context 'querying for the second group' do
+
+      let(:operations) { CasualJacket.operation_group(handle, group2) }
+
+      it 'returns a single element' do
+        expect(operations.count).to eq(1)
+      end
+
+      it 'returns an element with a matching group' do
+        expect(operations.first.group).to eq(group2)
+      end
+
+      it 'returns an operation with the expected attributes' do
+        expect(operations.first.attributes).to eq(expected_attributes2)
+      end
+
+    end
+
   end
 
-  it 'has produced an operation representing the first row from the csv' do
-    expect(operation_attributes).to include(expected_attributes1)
-  end
+  describe '.all_operations' do
 
-  it 'has produced an operation representing the second row from the csv' do
-    expect(operation_attributes).to include(expected_attributes2)
-  end
+    let(:operations) { CasualJacket.all_operations(handle) }
 
-  it 'has produces operations with the correct grouping' do
-    expect(operation_groups).to eq(expected_groups)
+    it 'returns a hash with the correct groups as keys' do
+      expect(operations.keys).to eq([group1, group2])
+    end
+
+    it 'has correctly grouped the first operation' do
+      expect(operations[group1].first.group).to eq(group1)
+    end
+
+    it 'has correctly grouped the second operation' do
+      expect(operations[group2].first.group).to eq(group2)
+    end
+
   end
 
 end
+

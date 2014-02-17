@@ -2,21 +2,22 @@ require 'spec_helper'
 
 describe CasualJacket::Operation do
 
-  let(:id)            { '12345' }
-  let(:consumer_name) { 'SomeClassWhatDoesStuff' }
-
-  let(:method_name) { :an_example_field }
-  let(:value)       { 'an example piece of data' }
-
+  let(:id)         { '12345' }
   let(:attributes) { { method_name => value }.to_json }
+  let(:group)      { 'somegroup' }
 
   let(:redis_hash) do
     {
-      'attributes' => attributes
+      'id'         => id,
+      'attributes' => attributes,
+      'group'      => group
     }
   end
 
-  let(:operation) { CasualJacket::Operation.from_redis(id, redis_hash) }
+  let(:operation) { CasualJacket::Operation.from_redis(redis_hash) }
+
+  let(:method_name) { :an_example_field }
+  let(:value)       { 'an example piece of data' }
 
   describe 'method additions' do
 

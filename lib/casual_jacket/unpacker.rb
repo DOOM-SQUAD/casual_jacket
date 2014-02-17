@@ -4,31 +4,38 @@ module CasualJacket
 
     extend self
 
-    def operations_for(handle)
-      CasualJacket.redis_connection.keys("#{handle}*").map do |key|
-        id = key.split('-').last
-        Operation.from_redis(id, redis_hash(key))
+    def operation_group(handle, group)
+      fetch_operations Keys.for_group(handle, group)
+    end
+
+    def all_operations(handle)
+      Keys.all(handle).inject({}) do |operations, (group, keys)|
+        operations.tap { |ops| ops[group] = fetch_operations(keys) }
       end
     end
 
     def failures_for(handle)
-      operations_for(handle).select do |operation|
-        error_ids_for(handle).include?(operation.id)
+      error_keys(handle).map do |key|
+        Operation.from_redis redis_hash(key)
       end
     end
 
     private
 
+    def error_keys(handle)
+      Keys.errors_list(handle)
+    end
+
+    def fetch_operations(keys)
+      fetch_keys(keys).map { |hash| Operation.from_redis(hash) }
+    end
+
+    def fetch_keys(keys)
+      keys.map { |key| redis_hash(key) }
+    end
+
     def redis_hash(key)
-      CasualJacket.redis_connection.hgetall(key)
-    end
-
-    def error_key_for(handle)
-      "errors:#{handle}"
-    end
-
-    def error_ids_for(handle)
-      CasualJacket.redis_connection.get(error_key_for(handle))
+      Keys.connection.hgetall(key)
     end
 
   end
