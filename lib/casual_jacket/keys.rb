@@ -38,10 +38,6 @@ module CasualJacket
       connection.keys("#{grouped_operation(handle, group)}*")
     end
 
-    def errors_list(handle)
-      connection.smembers errors(handle)
-    end
-
     private
 
     def all_for_handle(handle)

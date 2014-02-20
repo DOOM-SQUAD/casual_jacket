@@ -2,6 +2,7 @@ require 'json'
 require 'redis'
 require 'csv'
 
+require_relative 'casual_jacket/errors'
 require_relative 'casual_jacket/errors/wardrobe_malfunction'
 require_relative 'casual_jacket/errors/setting_not_configured'
 require_relative 'casual_jacket/errors/invalid_group_header'
