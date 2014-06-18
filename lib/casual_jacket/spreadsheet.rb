@@ -9,10 +9,6 @@ module CasualJacket
       @legend       = legend
       @group_header = group_header
       @parsed_data  = CSV.parse(@file, headers: :first_row)
-
-      unless legend[group_header]
-        raise Errors::InvalidGroupHeader.new(group_header)
-      end
     end
 
     def headers
@@ -26,7 +22,7 @@ module CasualJacket
     end
 
     def grouping_attribute
-      legend[group_header]
+      legend.fetch(group_header, group_header)
     end
 
     private

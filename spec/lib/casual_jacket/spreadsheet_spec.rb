@@ -38,24 +38,8 @@ describe CasualJacket::Spreadsheet do
 
   describe 'grouping' do
 
-    context 'an invalid group header is given' do
-
-      let(:group_header) { "this doesn't exist" }
-
-      let(:expected_error) { CasualJacket::Errors::InvalidGroupHeader }
-
-      it 'raises an InvalidGroupHeader error' do
-        expect { spreadsheet }.to raise_error(expected_error)
-      end
-
-    end
-
-    context 'a valid group header is given' do
-
-      it 'reports the attribute for grouping' do
-        expect(spreadsheet.grouping_attribute).to eq("stank")
-      end
-
+    it 'reports the attribute for grouping' do
+      expect(spreadsheet.grouping_attribute).to eq("stank")
     end
 
   end
