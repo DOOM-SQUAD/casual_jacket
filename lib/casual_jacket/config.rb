@@ -5,8 +5,9 @@ module CasualJacket
     extend self
     extend Options
 
-    def load!(path)
-      options = load_yaml(path) if settings
+    def load!(path, environment=nil)
+      compiled_config = ERB.new(File.read(path)).result
+      options = YAML.load(compiled_config) if settings
     end
 
     def options=(options)
