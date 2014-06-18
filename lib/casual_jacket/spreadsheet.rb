@@ -40,9 +40,14 @@ module CasualJacket
     def build_translated_row(row)
       Hash.new.tap do |translated_row|
         row.each do |key, value|
-          translated_row[legend[key]] = value
+          set_translation(translated_row, key, value)
         end
       end
+    end
+
+    def set_translation(translated_row, key, value)
+      translation_key = legend.fetch(key, key)
+      translated_row[translation_key] = value
     end
 
     def find_group(row)

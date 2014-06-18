@@ -84,7 +84,7 @@ describe CasualJacket do
     let(:operations) { CasualJacket.all_operations(handle) }
 
     it 'returns a hash with the correct groups as keys' do
-      expect(operations.keys).to eq([group1, group2])
+      expect(operations.keys).to match_array([group1, group2])
     end
 
     it 'has correctly grouped the first operation' do

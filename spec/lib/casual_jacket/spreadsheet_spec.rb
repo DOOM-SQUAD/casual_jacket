@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe CasualJacket::Spreadsheet do
 
-  let(:header_row)   { "header1,header2" }
-  let(:body_row1)    { "body11,body12" }
-  let(:body_row2)    { "body21,body22" }
+  let(:header_row)   { "header1,header2,untranslated_header" }
+  let(:body_row1)    { "body11,body12,body13" }
+  let(:body_row2)    { "body21,body22,body23" }
   let(:legend)       { { "header1" => "size", "header2" => "stank" } }
   let(:group_header) { "header2" }
 
@@ -26,8 +26,8 @@ describe CasualJacket::Spreadsheet do
 
   describe '#translated_rows' do
 
-    let(:row0)   { { "size" => "body11", "stank" => "body12" } }
-    let(:row1)   { { "size" => "body21", "stank" => "body22" } }
+    let(:row0)   { { "size" => "body11", "stank" => "body12", "untranslated_header" => "body13" } }
+    let(:row1)   { { "size" => "body21", "stank" => "body22", "untranslated_header" => "body23" } }
     let(:result) { [row0, row1] }
 
     it 'returns spreadsheet rows appropriately modified by the legend' do
