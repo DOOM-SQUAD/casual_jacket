@@ -14,6 +14,7 @@ require_relative 'casual_jacket/config/option_definitions'
 require_relative 'casual_jacket/keys'
 require_relative 'casual_jacket/spreadsheet'
 require_relative 'casual_jacket/operation'
+require_relative 'casual_jacket/cached_error'
 require_relative 'casual_jacket/packer'
 require_relative 'casual_jacket/unpacker'
 
@@ -128,6 +129,64 @@ module CasualJacket
   # Returns a hashed set of operation lists, organized by group
   def all_operations(handle)
     Unpacker.all_operations(handle)
+  end
+
+  # Fetch the set of CasualJacket::CachedError objects for the handle
+  #
+  # handle - The String for which handle to fetch errors
+  #
+  # Examples
+  #
+  #   CasualJacket.list_errors(handle)
+  #   # => [ #<CasualJacket::CachedError:123> ]
+  #
+  # Returns an Array of CasualJacket::CachedError objects
+  def list_errors(handle)
+    Errors.list(handle)
+  end
+
+  # Purge all errors for a given handle from the cache
+  #
+  # handle - The String representing the error handle to purge
+  #
+  # Examples
+  #
+  #   CasualJacket.clear_errors(handle)
+  #   # => nil
+  #
+  # Returns nil
+  def clear_errors(handle)
+    Errors.clear(handle)
+  end
+
+  # Fetch a set of errors for a given group.
+  #
+  # handle - The String representing the error handle
+  # group  - The String representing the group to order by
+  #
+  # Examples
+  #
+  #   CasualJacket.errors_for_group(handle, group)
+  #   # => [ #<CasualJacket::CachedError:123> ]
+  #
+  # Returns an Array of CasualJacket::CachedError objects
+  def errors_for_group(handle, group)
+    Errors.for_group(handle, group)
+  end
+
+  # Add an error to the cache
+  #
+  # handle       - The String representing the handle for the error
+  # cached_error - The CasualJacket::CachedError object to be cached
+  #
+  # Examples
+  #
+  #   CasualJacket.add_error(handle, cached_error)
+  #   # => nil
+  #
+  # Returns nil
+  def add_error(handle, cached_error)
+    Errors.add(handle, cached_error)
   end
 end
 

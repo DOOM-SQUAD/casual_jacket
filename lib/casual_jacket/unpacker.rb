@@ -4,6 +4,10 @@ module CasualJacket
 
     extend self
 
+    def single_operation(key)
+      Operation.from_redis redis_hash(key)
+    end
+
     def operation_group(handle, group)
       fetch_operations Keys.for_group(handle, group)
     end

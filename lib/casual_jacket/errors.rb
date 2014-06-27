@@ -5,15 +5,27 @@ module CasualJacket
     extend self
 
     def list(handle)
-      Keys.connection.hgetall Keys.errors(handle)
+      Keys.connection.smembers(error_key(handle)).map do |error_json|
+        CasualJacket::CachedError.from_redis(handle, error_json)
+      end
     end
 
     def for_group(handle, group)
-      Keys.connection.hget Keys.errors(handle), group
+      list(handle).select { |cached_error| cached_error.group == group }
     end
 
-    def add(handle, group, message)
-      Keys.connection.hset Keys.errors(handle), group, message
+    def add(handle, cached_error)
+      Keys.connection.sadd(error_key(handle), cached_error.to_hash.to_json)
+    end
+
+    def clear(handle)
+      Keys.connection.del(error_key(handle))
+    end
+    
+    private
+
+    def error_key(handle)
+      Keys.errors(handle)
     end
 
   end
