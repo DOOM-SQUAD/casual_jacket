@@ -3,7 +3,7 @@ require 'spec_helper'
 describe CasualJacket::CachedError do
 
   let(:handle)       { 'some-import' }
-  let(:context)      { "{\"some_field\":\"has this error\"}" }
+  let(:context)      { {"some_field" => "has this error"} }
   let(:group)        { 'ZOGM' }
   let(:operation_id) { '12345' }
 
@@ -20,7 +20,7 @@ describe CasualJacket::CachedError do
     end
 
     it 'creates a CachedError with the correct context' do
-      expect(error_from_json.context).to eq(JSON.parse(context))
+      expect(error_from_json.context).to eq(context)
     end
 
     it 'creates a CachedError with the correct group' do
@@ -37,7 +37,7 @@ describe CasualJacket::CachedError do
 
     let(:expected_hash) do
       {
-        'context'      => context,
+        'context'      => context.to_json,
         'group'        => group,
         'operation_id' => operation_id
       }

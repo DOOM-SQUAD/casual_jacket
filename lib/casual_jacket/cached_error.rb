@@ -6,12 +6,17 @@ module CasualJacket
 
     def self.from_redis(handle, json_string)
       error_hash = JSON.parse(json_string)
-      new(handle, error_hash['context'], error_hash['group'], error_hash['operation_id'])
+      new(
+        handle,
+        JSON.parse(error_hash['context']),
+        error_hash['group'],
+        error_hash['operation_id']
+      )
     end
 
     def initialize(handle, context, group=nil, operation_id=nil)
       @handle       = handle
-      @context      = JSON.parse(context)
+      @context      = context
       @group        = group
       @operation_id = operation_id
     end

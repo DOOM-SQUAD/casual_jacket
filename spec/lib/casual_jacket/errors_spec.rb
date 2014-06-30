@@ -4,7 +4,6 @@ describe CasualJacket::Errors do
 
   let(:handle)       { 'foo' }
   let(:context)      { { 'zogm' => 'errors' } }
-  let(:context_json) { JSON.generate(context) }
 
   before do
     CasualJacket::Keys.connection.flushall # FIXME
@@ -12,7 +11,7 @@ describe CasualJacket::Errors do
 
   describe '#list' do
 
-    let(:cached_error) { CasualJacket::CachedError.new(handle, context_json) }
+    let(:cached_error) { CasualJacket::CachedError.new(handle, context) }
 
     let(:result) { CasualJacket::Errors.list(handle) }
 
@@ -39,8 +38,8 @@ describe CasualJacket::Errors do
     let(:group0) { 'correct-group' }
     let(:group1) { 'incorrect-group' }
 
-    let(:cached_error0) { CasualJacket::CachedError.new(handle, context_json, group0) }
-    let(:cached_error1) { CasualJacket::CachedError.new(handle, context_json, group1) }
+    let(:cached_error0) { CasualJacket::CachedError.new(handle, context, group0) }
+    let(:cached_error1) { CasualJacket::CachedError.new(handle, context, group1) }
 
     let(:result) { CasualJacket::Errors.for_group(handle, group0) }
 
@@ -65,7 +64,7 @@ describe CasualJacket::Errors do
 
   describe '#clear' do
 
-    let(:cached_error) { CasualJacket::CachedError.new(handle, context_json) }
+    let(:cached_error) { CasualJacket::CachedError.new(handle, context) }
 
     let(:result) { CasualJacket::Errors.list(handle) }
 
