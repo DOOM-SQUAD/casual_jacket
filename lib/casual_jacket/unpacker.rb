@@ -24,14 +24,14 @@ module CasualJacket
       end
     end
 
+    def fetch_operations(keys)
+      fetch_keys(keys).map { |hash| Operation.from_redis(hash) }
+    end
+
     private
 
     def error_keys(handle)
       Keys.errors_list(handle)
-    end
-
-    def fetch_operations(keys)
-      fetch_keys(keys).map { |hash| Operation.from_redis(hash) }
     end
 
     def fetch_keys(keys)
