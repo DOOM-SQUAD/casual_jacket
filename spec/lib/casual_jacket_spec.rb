@@ -11,7 +11,6 @@ describe CasualJacket do
   let(:row2)    { "#{group2},654321" }
 
   let(:csv_string) { "#{headers}\n#{row1}\n#{row2}" }
-  let(:csv_file)   { StringIO.new(csv_string) }
 
   let(:legend) { { 'Group Code' => 'sku', 'UPC Code' => 'upc_code' } }
 
@@ -36,7 +35,7 @@ describe CasualJacket do
 
   before do
     CasualJacket::Keys.connection.flushall
-    CasualJacket.cache_operations(handle, csv_file, legend, group_header)
+    CasualJacket.cache_operations(handle, csv_string, legend, group_header)
   end
 
   describe '.operation_group' do

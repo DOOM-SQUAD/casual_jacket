@@ -4,15 +4,14 @@ module CasualJacket
 
     attr_reader :legend, :group_header
 
-    def initialize(file, legend, group_header)
-      @file         = file
-      @legend       = legend
-      @group_header = group_header
-      @parsed_data  = CSV.parse(@file, headers: :first_row)
+    def initialize(file_contents, legend, group_header)
+      @file_contents = file_contents
+      @legend        = legend
+      @group_header  = group_header
     end
 
     def headers
-      @parsed_data.headers
+      parsed_data.headers
     end
 
     def translated_rows(&block)
@@ -25,10 +24,18 @@ module CasualJacket
       legend.fetch(group_header, group_header)
     end
 
+    def parsed_data
+      @parsed_data ||= CSV.parse(fake_file, headers: :first_row)
+    end
+
     private
 
+    def fake_file
+      StringIO.new(@file_contents)
+    end
+
     def rows
-      @parsed_data.map do |row|
+      parsed_data.map do |row|
         build_translated_row(row)
       end
     end

@@ -8,12 +8,10 @@ describe CasualJacket::Spreadsheet do
   let(:legend)       { { "header1" => "size", "header2" => "stank" } }
   let(:group_header) { "header2" }
 
-  let(:csv_string) { "#{header_row}\n#{body_row1}\n#{body_row2}" }
-
-  let(:file) { StringIO.new(csv_string) }
+  let(:file_contents) { "#{header_row}\n#{body_row1}\n#{body_row2}" }
 
   let(:spreadsheet) do
-    CasualJacket::Spreadsheet.new(file, legend, group_header)
+    CasualJacket::Spreadsheet.new(file_contents, legend, group_header)
   end
 
   describe '#headers' do
