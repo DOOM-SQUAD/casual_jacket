@@ -5,7 +5,7 @@ module CasualJacket
     extend self
 
     def cache_spreadsheet(handle, spreadsheet)
-      spreadsheet.translated_rows do |index, attributes, group|
+      spreadsheet.each_translated_row do |index, attributes, group|
         operation = Operation.new(index, attributes, group)
         cache_operation(handle, operation)
       end

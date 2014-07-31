@@ -13,6 +13,7 @@ require_relative 'casual_jacket/config/option_definitions'
 
 require_relative 'casual_jacket/keys'
 require_relative 'casual_jacket/spreadsheet'
+require_relative 'casual_jacket/translated_row'
 require_relative 'casual_jacket/operation'
 require_relative 'casual_jacket/cached_error'
 require_relative 'casual_jacket/packer'

@@ -14,18 +14,15 @@ module CasualJacket
       parsed_data.headers
     end
 
-    def translated_rows(&block)
-      rows.each.with_index(1) do |row, index|
-        yield index, row, find_group(row) if block_given?
-      end
-    end
-
-    def grouping_attribute
-      legend.fetch(group_header, group_header)
-    end
-
     def parsed_data
       @parsed_data ||= CSV.parse(fake_file, headers: :first_row)
+    end
+
+    def each_translated_row(&block)
+      parsed_data.to_enum.with_index(1) do |row, index|
+        translated_row = translate_row(row)
+        yield index, translated_row.attributes, translated_row.group if block_given?
+      end
     end
 
     private
@@ -34,27 +31,8 @@ module CasualJacket
       StringIO.new(@file_contents)
     end
 
-    def rows
-      parsed_data.map do |row|
-        build_translated_row(row)
-      end
-    end
-
-    def build_translated_row(row)
-      Hash.new.tap do |translated_row|
-        row.each do |key, value|
-          set_translation(translated_row, key, value)
-        end
-      end
-    end
-
-    def set_translation(translated_row, key, value)
-      translation_key = legend.fetch(key, key)
-      translated_row[translation_key] = value
-    end
-
-    def find_group(row)
-      row[grouping_attribute]
+    def translate_row(row)
+      TranslatedRow.new(headers, legend, group_header, row)
     end
 
   end

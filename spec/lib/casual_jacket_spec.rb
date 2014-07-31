@@ -12,7 +12,7 @@ describe CasualJacket do
 
   let(:csv_string) { "#{headers}\n#{row1}\n#{row2}" }
 
-  let(:legend) { { 'Group Code' => 'sku', 'UPC Code' => 'upc_code' } }
+  let(:legend) { { 'Group Code' => ['sku'], 'UPC Code' => ['upc_code'] } }
 
   let(:group_header) { 'Group Code' }
 
