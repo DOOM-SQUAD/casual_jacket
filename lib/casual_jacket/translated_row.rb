@@ -16,7 +16,9 @@ module CasualJacket
     end
 
     def attributes
-      translated_values.merge(untranslated_values)
+      legend.keys.each_with_object({}) do |header, attributes|
+        attributes.merge! translated_header(header)
+      end
     end
 
     private
@@ -25,21 +27,9 @@ module CasualJacket
       headers - legend.keys
     end
 
-    def translated_values
-      legend.keys.each_with_object({}) do |header, attributes|
-        attributes.merge! translated_header(header)
-      end
-    end
-
     def translated_header(header)
       legend[header].each_with_object({}) do |attribute, translated_hash|
         translated_hash[attribute] = csv_row[header]
-      end
-    end
-
-    def untranslated_values
-      untranslated_headers.each_with_object({}) do |header, attributes|
-        attributes[header] = csv_row[header]
       end
     end
 

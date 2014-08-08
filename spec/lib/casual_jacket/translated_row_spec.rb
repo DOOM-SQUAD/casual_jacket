@@ -32,8 +32,7 @@ describe CasualJacket::TranslatedRow do
       {
         "size"                => "body11",
         "stank"               => "body12",
-        "copied_attribute"    => "body12",
-        "untranslated_header" => "body13"
+        "copied_attribute"    => "body12"
       }
     end
 
