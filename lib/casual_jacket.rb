@@ -1,5 +1,6 @@
 require 'json'
 require 'redis'
+require 'yaml'
 require 'csv'
 
 require_relative 'casual_jacket/errors'

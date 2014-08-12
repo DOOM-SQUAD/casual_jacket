@@ -9,7 +9,7 @@ module CasualJacket
     extend self
 
     def connection
-      @connection ||= Redis.new(host: Config.redis_host)
+      @connection ||= Redis.new(url: Config.redis_host)
     end
 
     def base_operation(handle)

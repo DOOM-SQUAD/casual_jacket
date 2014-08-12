@@ -7,7 +7,7 @@ module CasualJacket
 
     def load!(path, environment=nil)
       compiled_config = ERB.new(File.read(path)).result
-      options = YAML.load(compiled_config) if settings
+      self.options = YAML.load(compiled_config) if settings
     end
 
     def options=(options)

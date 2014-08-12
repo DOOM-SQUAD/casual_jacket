@@ -4,13 +4,27 @@ describe CasualJacket::Config do
 
   let(:config) { CasualJacket::Config }
 
+  let(:domain) { 'fake.domain.string' }
+
   after do
     CasualJacket::Config.reset
   end
 
-  describe 'standard configuration' do
+  describe '.load!' do
 
-    let(:domain) { 'fake.domain.string' }
+    let(:domain) { 'redis://some.url.thing:6732' }
+
+    before do
+      CasualJacket.load!('./spec/data/config_yaml.yml')
+    end
+
+    it 'correctly sets the redis host' do
+      expect(config.redis_host).to eq(domain)
+    end
+
+  end
+
+  describe 'standard configuration' do
 
     before do
       CasualJacket.configure do |settings|
